@@ -8,3 +8,4 @@ email-validator>=2.0
 pandas>=2.0
 matplotlib>=3.8
 seaborn>=0.13
+lap>=0.5.12

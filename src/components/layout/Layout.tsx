@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
-import { useAlerts } from '@/hooks/use-safety-api';
+import { useLatestResult } from '@/hooks/use-safety-api';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,7 +9,8 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const activeAlerts = useAlerts().length;
+  const { result } = useLatestResult();
+  const activeAlerts = result?.alerts ?? 0;
 
   return (
     <div className="min-h-screen bg-background">

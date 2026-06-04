@@ -9,13 +9,20 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useAlerts } from '@/hooks/use-safety-api';
-import { mapApiAlertToAlert } from '@/lib/api';
-import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 const ViolationsLog = () => {
   const apiAlerts = useAlerts();
-  const logs = apiAlerts.map((a, i) => ({ ...mapApiAlertToAlert(a, i), status: 'unresolved' as const }));
+  // `apiAlerts` is an array of detection violations returned by the backend
+  const logs = apiAlerts.map((a, i) => ({
+    // backend fields: time (string), worker_id, missing_ppe, severity, status
+    time: a.time,
+    workerId: a.worker_id,
+    violationType: a.missing_ppe.join(', '),
+    severity: a.severity,
+    status: a.status,
+    idx: i,
+  }));
 
   const unresolved = logs.length;
   const resolved = 0;
@@ -94,31 +101,29 @@ const ViolationsLog = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              logs.map((log, i) => (
-                <TableRow key={`${log.cameraId}-${log.timestamp.toISOString()}-${i}`} className="hover:bg-muted/30">
-                  <TableCell className="font-mono text-sm">
-                    {format(log.timestamp, 'HH:mm:ss')}
-                    <span className="block text-xs text-muted-foreground">
-                      {format(log.timestamp, 'MMM d, yyyy')}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="font-medium">{log.cameraName}</span>
-                    <span className="block text-xs text-muted-foreground">ID: {log.cameraId}</span>
-                  </TableCell>
-                  <TableCell>{log.violationType}</TableCell>
-                  <TableCell>
-                    <Badge className={cn('capitalize', severityColors[log.severity])}>
-                      {log.severity}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className="bg-destructive/10 text-destructive">
-                      <XCircle className="h-3 w-3 mr-1" /> Unresolved
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))
+                logs.map((log) => (
+                  <TableRow key={`violation-${log.workerId}-${log.idx}`} className="hover:bg-muted/30">
+                    <TableCell className="font-mono text-sm">
+                      {log.time}
+                      <span className="block text-xs text-muted-foreground">from video</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="font-medium">Worker</span>
+                      <span className="block text-xs text-muted-foreground">ID: {log.workerId}</span>
+                    </TableCell>
+                    <TableCell>{log.violationType}</TableCell>
+                    <TableCell>
+                      <Badge className={cn('capitalize', severityColors[log.severity] || 'bg-muted text-muted-foreground')}>
+                        {log.severity}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={log.status === 'UNSAFE' ? 'bg-destructive/10 text-destructive' : 'bg-success/10 text-success'}>
+                        {log.status}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))
             )}
           </TableBody>
         </Table>

@@ -9,7 +9,7 @@ MODEL_PATH = MODELS_DIR / "best.pt"
 
 # Temp storage for uploaded videos and output
 UPLOAD_DIR = BASE_DIR / "uploads"
-OUTPUT_DIR = BASE_DIR / "output"
+OUTPUT_DIR = BASE_DIR / "outputs"
 UPLOAD_DIR.mkdir(exist_ok=True)
 OUTPUT_DIR.mkdir(exist_ok=True)
 

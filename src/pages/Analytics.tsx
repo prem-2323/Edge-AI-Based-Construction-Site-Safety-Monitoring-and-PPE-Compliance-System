@@ -16,38 +16,39 @@ import {
   Line,
 } from 'recharts';
 
-const violationsByType = [
-  { name: 'Helmet Missing', count: 45 },
-  { name: 'Safety Vest', count: 32 },
-  { name: 'Safety Boots', count: 18 },
-  { name: 'Safety Harness', count: 12 },
-  { name: 'Gloves Missing', count: 8 },
-];
-
-const weeklyData = [
-  { day: 'Mon', violations: 12 },
-  { day: 'Tue', violations: 8 },
-  { day: 'Wed', violations: 15 },
-  { day: 'Thu', violations: 6 },
-  { day: 'Fri', violations: 10 },
-  { day: 'Sat', violations: 4 },
-  { day: 'Sun', violations: 2 },
-];
-
-const hourlyData = [
-  { hour: '6AM', violations: 2 },
-  { hour: '8AM', violations: 8 },
-  { hour: '10AM', violations: 12 },
-  { hour: '12PM', violations: 6 },
-  { hour: '2PM', violations: 10 },
-  { hour: '4PM', violations: 8 },
-  { hour: '6PM', violations: 3 },
-];
+// Chart data will be derived from the live analytics endpoint (fallbacks provided)
 
 const COLORS = ['hsl(0, 84%, 60%)', 'hsl(25, 95%, 53%)', 'hsl(43, 96%, 56%)', 'hsl(142, 76%, 36%)', 'hsl(220, 14%, 70%)'];
 
 const Analytics = () => {
   const live = useAnalytics();
+
+  const violationsByType = live?.pie_distribution?.map((p) => ({ name: p.name, count: p.count })) ?? [
+    { name: 'Helmet Missing', count: 0 },
+    { name: 'Vest Missing', count: 0 },
+    { name: 'Shoes Missing', count: 0 },
+    { name: 'Gloves Missing', count: 0 },
+  ];
+
+  const weeklyData = live?.weekly_trend ?? [
+    { day: 'Mon', violations: 0 },
+    { day: 'Tue', violations: 0 },
+    { day: 'Wed', violations: 0 },
+    { day: 'Thu', violations: 0 },
+    { day: 'Fri', violations: 0 },
+    { day: 'Sat', violations: 0 },
+    { day: 'Sun', violations: 0 },
+  ];
+
+  const hourlyData = live?.hourly_pattern ?? [
+    { hour: '6AM', violations: 0 },
+    { hour: '8AM', violations: 0 },
+    { hour: '10AM', violations: 0 },
+    { hour: '12PM', violations: 0 },
+    { hour: '2PM', violations: 0 },
+    { hour: '4PM', violations: 0 },
+    { hour: '6PM', violations: 0 },
+  ];
 
   return (
     <div className="space-y-6">

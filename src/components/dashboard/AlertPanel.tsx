@@ -1,10 +1,9 @@
 import { AlertTriangle, Clock, ChevronRight } from 'lucide-react';
-import { Alert } from '@/data/mockData';
+import { DetectionViolation } from '@/lib/api';
 import { cn } from '@/lib/utils';
-import { formatDistanceToNow } from 'date-fns';
 
 interface AlertPanelProps {
-  alerts: Alert[];
+  alerts: DetectionViolation[];
 }
 
 export const AlertPanel = ({ alerts }: AlertPanelProps) => {
@@ -43,7 +42,7 @@ export const AlertPanel = ({ alerts }: AlertPanelProps) => {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-medium text-card-foreground">
-                      {alert.cameraName}
+                      Worker {alert.worker_id}
                     </span>
                     <span className={cn(
                       "text-xs px-2 py-0.5 rounded-full uppercase font-medium",
@@ -55,11 +54,11 @@ export const AlertPanel = ({ alerts }: AlertPanelProps) => {
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {alert.violationType}
+                    Missing PPE: {alert.missing_ppe.join(', ')}
                   </p>
                   <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
                     <Clock className="h-3 w-3" />
-                    <span>{formatDistanceToNow(alert.timestamp, { addSuffix: true })}</span>
+                    <span>{alert.time}</span>
                   </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-muted-foreground" />
