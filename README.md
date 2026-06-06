@@ -2,6 +2,10 @@
 
 Lightweight dashboard that demonstrates PPE (helmet/vest) detection on uploaded CCTV video using a FastAPI backend and an optional YOLOv8 model. The frontend is a Vite + React + TypeScript app with Tailwind and shadcn-ui components.
 
+UI Video 
+https://drive.google.com/file/d/1ofyA_POIsi-gqC3lxfHkE87ZK1nGebnL/view?usp=sharing
+
+
 **Repo structure (top-level)**
 
 - `src/` — frontend source (React + TypeScript)
